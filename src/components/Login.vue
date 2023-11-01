@@ -52,6 +52,9 @@
           localStorage.setItem('token', token);
           console.log('Token stored in local storage.',token);
         }
+        this.$router.push({
+        name: "Products",
+      });
       },
     },
   }
