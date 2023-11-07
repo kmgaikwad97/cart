@@ -5,8 +5,9 @@
                 <h2>Products</h2>
             </div>
             <div class="row m-0">
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 p-5 d-flex align-items-center flex-column" v-for="items of product" :key="items._id">
-                    <figure @click="onlyProduct(items._id)" >
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 p-5 d-flex align-items-center flex-column"
+                    v-for="items of product" :key="items._id">
+                    <figure @click="onlyProduct(items._id)">
                         <img :src="items.imgLink" alt="">
                     </figure>
                     <p class="title">
@@ -27,7 +28,50 @@
             <!-- pagination starts -->
 
             <div class="my-4">
-                <h2>Pagination coming soon</h2>
+                <h2>Images from Google Firebase Storage</h2>
+
+
+                <div class="row m-0">
+                    <h2></h2>
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 p-5 d-flex align-items-center flex-column"
+                        v-for="items of photo" :key="items._id">
+                        <figure>
+                            <img :src="items.image" alt="">
+                        </figure>
+                        <p class="title">
+                            <b>{{ items.name }}</b>
+                        </p>
+                        <button @click="addtocart(items._id)" type="button" class="btn btn-danger">Add To Cart</button>
+                    </div>
+                </div>
+            </div>
+            <!-- pagination ends -->
+
+
+            <!-- pagination starts -->
+
+            <div class="my-4">
+                <h2>Songs from Google Firebase Storage</h2>
+
+
+                <div class="row m-0">
+                    <h2></h2>
+                    <div class="border col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 p-5 d-flex align-items-center flex-column"
+                        v-for="items of song" :key="items._id">
+                        <!-- <div v-for="(song, index) in songs" :key="index"> -->
+                            <div>
+                                <h2>{{ items.name }}</h2>
+                                <p>Artist: {{ items.artist }}</p>
+                                <figure>
+                            <img :src="items.photo" alt="">
+                        </figure>
+                                <audio controls>
+                                    <source :src="items.song" type="audio/mpeg">
+                                </audio>
+                            </div>
+                        <!-- </div> -->
+                    </div>
+                </div>
             </div>
             <!-- pagination ends -->
 
@@ -42,7 +86,9 @@ export default {
     name: 'Product',
     data() {
         return {
-            product: ""
+            product: "",
+            photo: "",
+            song:""
         }
     },
     async mounted() {
@@ -53,6 +99,19 @@ export default {
         );
         console.log(result);
         this.product = result.data
+
+
+
+        const resultFirebase = await axios.get('http://localhost:4000/api/v1/upload-img',
+        );
+        console.log("resultFirebase", resultFirebase);
+        this.photo = resultFirebase.data.data
+
+
+        const songFirebase = await axios.get('http://localhost:4000/api/v1/upload-song',
+        );
+        console.log("songFirebase", songFirebase);
+        this.song = songFirebase.data.data
     },
     methods: {
         // async getAll() {
@@ -80,30 +139,30 @@ export default {
             }
         },
 
-        async onlyProduct(id){
+        async onlyProduct(id) {
             // Check if the response contains a token
-        if (id) {
-          // Store the token in local storage
-          localStorage.setItem('id', id);
-          console.log('product id stored in local storage.',id);
-        }
+            if (id) {
+                // Store the token in local storage
+                localStorage.setItem('id', id);
+                console.log('product id stored in local storage.', id);
+            }
             // console.log("id", id);
             // const token = localStorage.getItem('token');
             // console.log("token ::", token);
-            try{
+            try {
                 this.$router.push({
                     name: "Product",
-                    params: { id } 
+                    params: { id }
                 });
-            //     // Set the Authorization header in the Axios request
-            //     const headers = {
-            //       'Authorization': `Bearer ${token}`,
-            //   };
-            //   let result = await axios.get("http://localhost:4000/api/v1/product/" + id, { headers });
-            //     // this.getAll();
-            //   console.log("result :", result);
+                //     // Set the Authorization header in the Axios request
+                //     const headers = {
+                //       'Authorization': `Bearer ${token}`,
+                //   };
+                //   let result = await axios.get("http://localhost:4000/api/v1/product/" + id, { headers });
+                //     // this.getAll();
+                //   console.log("result :", result);
 
-            }catch(err){
+            } catch (err) {
                 console.log(err.message);
             }
         }
@@ -114,13 +173,18 @@ export default {
 </script>
   
 <style>
-figure{
+figure {
     cursor: pointer;
     height: 200px;
     width: 200px;
 }
-figure img, .img-fluid{
+
+figure img,
+.img-fluid {
     max-width: 100%;
     height: 100% !important;
+}
+audio{
+    width: 200px;
 }
 </style>

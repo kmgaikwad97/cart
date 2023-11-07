@@ -18,7 +18,24 @@ export default {
     name: 'App',
     components: {
         ProgressBar
-    }
+    },
+    data() {
+        return {
+            userName: ""
+        }
+    },
+    async mounted() {
+      const token = localStorage.getItem('token');
+      console.log("token ::", token);
+
+        // Retrieve the token from local storage
+
+        // const result = await axios.get('http://localhost:3001/getProduct');
+        const result = await axios.get('http://localhost:4000/api/v1/',
+        );
+        console.log(result);
+        this.product = result.data
+    },
 }
 </script>
 

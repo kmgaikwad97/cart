@@ -33,7 +33,7 @@
                                 This order contains a gift
                             </label>
                         </div>
-                        <button type="button" class="my-3 btn btn-success">Proceed to Buy</button>
+                        <button type="button" @click="buyThat" class="my-3 btn btn-success">Proceed to Buy</button>
                         <div class="accordion" id="accordionExample">
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
@@ -88,6 +88,13 @@ export default {
             console.log(err.message);
         }
     },
+    methods:{
+        async buyThat(){
+            this.$router.push({
+            name: "Address",
+        })
+    }
+    }
 }
 
 
