@@ -59,21 +59,32 @@
                     <div class="border col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 p-5 d-flex align-items-center flex-column"
                         v-for="items of song" :key="items._id">
                         <!-- <div v-for="(song, index) in songs" :key="index"> -->
-                            <div>
-                                <h2>{{ items.name }}</h2>
-                                <p>Artist: {{ items.artist }}</p>
-                                <figure>
-                            <img :src="items.photo" alt="">
-                        </figure>
-                                <audio controls>
-                                    <source :src="items.song" type="audio/mpeg">
-                                </audio>
-                            </div>
+                        <div>
+                            <h2>{{ items.name }}</h2>
+                            <p>Artist: {{ items.artist }}</p>
+                            <figure>
+                                <img :src="items.photo" alt="">
+                            </figure>
+                            <audio controls>
+                                <source :src="items.song" type="audio/mpeg">
+                            </audio>
+                        </div>
                         <!-- </div> -->
                     </div>
                 </div>
             </div>
             <!-- pagination ends -->
+
+            <!-- geo location starts -->
+            <div class="geo-data">
+                <h1>Vue.js Geolocation</h1>
+                <p>Click the button to get your coordinates.</p>
+                <button @click="getLocation">Try It</button>
+                <p v-html="locationInfo"></p>
+            </div>
+            <!-- geo location ends -->
+
+
 
 
         </div>
@@ -88,7 +99,9 @@ export default {
         return {
             product: "",
             photo: "",
-            song:""
+            song: "",
+            locationInfo: '',
+            video:''
         }
     },
     async mounted() {
@@ -114,6 +127,19 @@ export default {
         this.song = songFirebase.data.data
     },
     methods: {
+        getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(this.showPosition, this.handleGeolocationError);
+            } else {
+                this.locationInfo = "Geolocation is not supported by this browser.";
+            }
+        },
+        showPosition(position) {
+            this.locationInfo = `Latitude: ${position.coords.latitude}<br>Longitude: ${position.coords.longitude}`;
+        },
+        handleGeolocationError() {
+            this.locationInfo = "Error: Unable to retrieve your location.";
+        },
         // async getAll() {
         //   const result = await axios.get("http://localhost:3001/user");
         //   console.log("result", result.data);
@@ -184,7 +210,8 @@ figure img,
     max-width: 100%;
     height: 100% !important;
 }
-audio{
+
+audio {
     width: 200px;
 }
 </style>
